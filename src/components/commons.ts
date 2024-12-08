@@ -39,3 +39,12 @@ export const ErrorText = styled.span`
   font-size: 18px;
   margin: 7px 0;
 `;
+
+export const Head = styled.div`
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    color: #ffffff;
+    text-align: center;
+    background-color: #1c1c1c;
+    font-size: 30px;
+    padding: 7px 7px;
+`
