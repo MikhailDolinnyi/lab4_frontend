@@ -33,3 +33,20 @@ body {
     gap: 20px; /* Расстояние между координатной плоскостью и формой */
     margin-top: 5%;
 }
+
+#result-table {
+    max-height: 450px; /* Фиксированная высота для таблицы */
+    overflow-y: auto; /* Вертикальная прокрутка */
+    display: block;
+    border: 2px grey;
+    border-collapse: collapse;
+    width: 40%;
+    background: white;
+    border-radius: 13px;
+
+}
+
+#result-table th, #result td {
+    width: 100px; /* Ширина ячеек для корректной работы прокрутки */
+    text-align: center;
+}

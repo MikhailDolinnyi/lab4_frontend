@@ -19,6 +19,7 @@ import {
 import {Combobox} from "baseui/combobox";
 import Form from "./form";
 import CoordinateForm from "./form";
+import Table from "./table";
 
 function Home() {
     const [error, setError] = useState("")
@@ -73,6 +74,8 @@ function Home() {
                 <CoordinatePlate/>
                 <ErrorText>{error}</ErrorText>
                 <CoordinateForm></CoordinateForm>
+                <Table/>
+
             </div>
         </>
 

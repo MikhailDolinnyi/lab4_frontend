@@ -13,7 +13,7 @@ function CoordinateForm() {
 
         try {
             const response = await axios.post(
-                "http://localhost:8080/api/check-dot",
+                "http://localhost:8080/dot/check",
                 values
             );
 
