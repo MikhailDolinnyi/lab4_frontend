@@ -1,20 +1,30 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import axios from "axios";
-import {triggerRefresh} from "../../tableSlice";
+import {incrementScaleCounter, resetScaleCounter, triggerRefresh} from "../../tableSlice";
 
 function CoordinatePlate() {
     const table = useSelector((state) => state.tableEditor.table)
-    const dispatch = useDispatch();
     const radius = useSelector((state) => state.tableEditor.radius)
+    const refreshTable = useSelector((state)=>state.tableEditor.refreshTable)
+    const loading = useSelector((state) => state.tableEditor.loading)
+    const scaleCounter = useSelector((state) => state.tableEditor.scaleCounter)
+
+    const dispatch = useDispatch();
 
     const beginPlate = 250;
     const width = 500;
     const height = 500;
 
+    useEffect(() => {
+        dispatch(resetScaleCounter())
+    }, [radius,dispatch]);
+
     let scaleFactor = radius / 3
 
+
     const handlePlateClick = async (event) => {
+
         const svg = event.currentTarget
         const point = svg.createSVGPoint()
 
@@ -39,7 +49,7 @@ function CoordinatePlate() {
                 values
             );
 
-
+            dispatch(incrementScaleCounter())
             dispatch(triggerRefresh());
         } catch (err) {
             console.error("Error sending dot:", err);
@@ -47,11 +57,32 @@ function CoordinatePlate() {
     }
 
 
-    const dots = table.map((dot, index) => (
-        <circle key={index} cx={beginPlate + (dot.x * 33 * scaleFactor)} cy={beginPlate - (dot.y * 33 * scaleFactor)}
-                r="2"
-                fill={dot.result ? "green" : "red"}/>)
-    )
+    const dots = loading ? [] : table.map((dot, index) => {
+        // Check if the dot is one of the last `scaleCounter` dots
+        if (index >= table.length - scaleCounter) {
+            return (
+                <circle
+                    key={index}
+                    cx={beginPlate + (dot.x * 33)}
+                    cy={beginPlate - (dot.y * 33)}
+                    r="2"
+                    fill={dot.result ? "green" : "red"}
+                />
+            );
+        } else {
+            // Remaining dots with scaling
+            return (
+                <circle
+                    key={index}
+                    cx={beginPlate + (dot.x * 33 * scaleFactor)}
+                    cy={beginPlate - (dot.y * 33 * scaleFactor)}
+                    r="2"
+                    fill={dot.result ? "green" : "red"}
+                />
+            );
+        }
+    });
+
 
 
     return (
