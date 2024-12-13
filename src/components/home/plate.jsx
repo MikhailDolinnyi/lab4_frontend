@@ -1,26 +1,62 @@
 import React from "react";
 import {useDispatch, useSelector} from "react-redux";
+import axios from "axios";
+import {triggerRefresh} from "../../tableSlice";
 
 function CoordinatePlate() {
     const table = useSelector((state) => state.tableEditor.table)
     const dispatch = useDispatch();
     const radius = useSelector((state) => state.tableEditor.radius)
 
+    const beginPlate = 250;
     const width = 500;
     const height = 500;
 
     let scaleFactor = radius / 3
 
+    const handlePlateClick = async (event) => {
+        const svg = event.currentTarget
+        const point = svg.createSVGPoint()
+
+        point.x = event.clientX
+        point.y = event.clientY
+
+        const transformedPoint = point.matrixTransform(svg.getScreenCTM().inverse())
+
+
+        const x = ((transformedPoint.x - beginPlate) / 33).toFixed(2)
+        const y = ((beginPlate - transformedPoint.y) / 33).toFixed(2)
+
+        const values = {
+            x: parseFloat(x),
+            y: parseFloat(y),
+            r: radius,
+        };
+
+        try {
+            await axios.post(
+                "http://localhost:8080/dot/check",
+                values
+            );
+
+
+            dispatch(triggerRefresh());
+        } catch (err) {
+            console.error("Error sending dot:", err);
+        }
+    }
+
 
     const dots = table.map((dot, index) => (
-        <circle key={index} cx={width / 2 + (dot.x * 33)} cy={width / 2 - (dot.y * 33)} r="2"
+        <circle key={index} cx={beginPlate + (dot.x * 33 * scaleFactor)} cy={beginPlate - (dot.y * 33 * scaleFactor)}
+                r="2"
                 fill={dot.result ? "green" : "red"}/>)
     )
 
 
     return (
         <svg id="coordinate-plate" width={width} height={height} viewBox="0 0 500 500"
-             xmlns="http://www.w3.org/2000/svg">
+             xmlns="http://www.w3.org/2000/svg" onClick={handlePlateClick}>
             {/* Оси X и Y */}
             <line x1="50" y1="250" x2="450" y2="250" stroke="silver" strokeWidth="2"/>
             <line x1="250" y1="50" x2="250" y2="450" stroke="silver" strokeWidth="2"/>
