@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import axios from "axios";
-import {incrementScaleCounter, resetScaleCounter, triggerRefresh} from "../../tableSlice";
+import {incrementScaleCounter, resetScaleCounter, triggerRefresh} from "../../generalSlice";
 
 function CoordinatePlate() {
     const table = useSelector((state) => state.tableEditor.table)

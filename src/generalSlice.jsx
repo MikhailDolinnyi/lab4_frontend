@@ -1,6 +1,6 @@
 import {createSlice} from "@reduxjs/toolkit";
 
-export const tableSlice = createSlice({
+export const generalSlice = createSlice({
     name: 'tableEditor',
     initialState: {
         table: [],
@@ -40,6 +40,6 @@ export const {
     incrementScaleCounter,
     resetScaleCounter,
     setLoading
-} = tableSlice.actions
+} = generalSlice.actions
 
-export default tableSlice.reducer
+export default generalSlice.reducer

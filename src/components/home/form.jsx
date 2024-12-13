@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import {Button} from "baseui/button";
 import axios, {AxiosError} from "axios";
 import {useDispatch} from "react-redux";
-import {triggerRefresh, updateGraph} from "../../tableSlice"
+import {triggerRefresh, updateGraph} from "../../generalSlice"
 
 
 function CoordinateForm() {
