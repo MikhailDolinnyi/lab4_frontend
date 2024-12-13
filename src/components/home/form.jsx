@@ -3,10 +3,15 @@ import {useFormik} from "formik";
 import * as Yup from "yup";
 import {Button} from "baseui/button";
 import axios, {AxiosError} from "axios";
+import {useDispatch} from "react-redux";
+import {triggerRefresh, updateGraph} from "../../tableSlice"
 
 
 function CoordinateForm() {
     const [error, setError] = useState("");
+    const dispatch = useDispatch()
+
+
     const onSubmit = async (values) => {
         console.log("Values: ", values)
         setError("")
@@ -16,6 +21,8 @@ function CoordinateForm() {
                 "http://localhost:8080/dot/check",
                 values
             );
+
+            dispatch(triggerRefresh())
 
         } catch (err) {
             if (err && err instanceof AxiosError)
@@ -30,9 +37,9 @@ function CoordinateForm() {
 
     const formik = useFormik({
         initialValues: {
-            x: "-5", // Начальное значение для ComboBox
+            x: "0", // Начальное значение для ComboBox
             y: "", // Начальное значение для TextInput
-            r: "1", // Начальное значение для ComboBox
+            r: "3", // Начальное значение для ComboBox
         },
         validationSchema: Yup.object({
             y: Yup.number()
@@ -44,6 +51,12 @@ function CoordinateForm() {
         }),
         onSubmit
     });
+
+
+    const handleRadiusChange = (e) => {
+        formik.handleChange(e);
+        dispatch(updateGraph(e.target.value))
+    }
 
     return (
         <form id="forms" onSubmit={formik.handleSubmit}>
@@ -64,8 +77,8 @@ function CoordinateForm() {
             {/* ComboBox for X */}
 
             <div className="type-form">
-                <label htmlFor="x">X Coordinate:</label>
-                <select className="type-form"
+                <label htmlFor="x-coordinate">X Coordinate:</label>
+                <select id="x-coordinate" className="type-form"
                         name="x"
                         value={formik.values.x}
                         onChange={formik.handleChange}
@@ -82,8 +95,9 @@ function CoordinateForm() {
 
             {/* TextInput for Y */}
             <div className="type-form">
-                <label htmlFor="y">Y Coordinate (-3 to 3):</label>
+                <label htmlFor="y-coordinate">Y Coordinate (-3 to 3):</label>
                 <input
+                    id="y-coordinate"
                     type="number"
                     name="y"
                     value={formik.values.y}
@@ -96,11 +110,12 @@ function CoordinateForm() {
 
             <div className="type-form">
                 {/* ComboBox for Radius */}
-                <label htmlFor="r">Radius:</label>
-                <select className="type-form"
+                <label htmlFor="radius">Radius:</label>
+                <select id="radius"
+                        className="type-form"
                         name="r"
                         value={formik.values.r}
-                        onChange={formik.handleChange}
+                        onChange={handleRadiusChange}
                         onBlur={formik.handleBlur}
                 >
                     {["-5", "-4", "-3", "-2", "-1", "0", "1", "2", "3"].map((option) => (
@@ -112,7 +127,7 @@ function CoordinateForm() {
             </div>
 
             {/* Submit Button */}
-            <Button primary isLoading={formik.isSubmitting}>
+            <Button type="submit" isLoading={formik.isSubmitting}>
                 Submit</Button>
         </form>
     );

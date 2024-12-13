@@ -20,10 +20,13 @@ body {
     flex-direction: column;
     justify-content: center; /* Центрирование внутри формы */
     height: auto; /* Высота автоматически под содержимое */
+    background-color: white;;
+    padding: 7px 7px;
+    border-radius: 10px;
 }
 
 .type-form {
-    margin-bottom: 5px;
+    margin-bottom: 6px;
 
 }
 
@@ -50,3 +53,13 @@ body {
     width: 100px; /* Ширина ячеек для корректной работы прокрутки */
     text-align: center;
 }
+
+.results {
+    width: 100px; /* Ширина ячеек для корректной работы прокрутки */
+    text-align: center;
+}
+
+#greeting {
+
+}
+
