@@ -2,10 +2,9 @@ import React, {useState} from "react";
 import {useFormik} from "formik";
 import * as Yup from "yup";
 import {Button} from "baseui/button";
-import axios, {AxiosError} from "axios";
 import {useDispatch} from "react-redux";
 import {triggerRefresh, updateGraph} from "../../generalSlice"
-
+import axiosInstance from "../../axiosInstance";
 
 function CoordinateForm() {
     const [error, setError] = useState("");
@@ -17,19 +16,10 @@ function CoordinateForm() {
         setError("")
 
         try {
-            const response = await axios.post(
-                "http://localhost:8080/dot/check",
-                values
-            );
-
-            dispatch(triggerRefresh())
-
+            const response = await axiosInstance.post("/dot/check", values);
+            dispatch(triggerRefresh());
         } catch (err) {
-            if (err && err instanceof AxiosError)
-                setError(err.response?.data.message);
-            else if (err && err instanceof Error) setError(err.message);
-
-            console.log("Error: ", err);
+            console.error("Error:", err);
         }
 
     }

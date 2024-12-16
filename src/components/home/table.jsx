@@ -2,6 +2,7 @@ import axios from "axios";
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {editTable, setLoading} from "../../generalSlice";
+import axiosInstance from "../../axiosInstance";
 
 function Table() {
 
@@ -18,7 +19,7 @@ function Table() {
     async function fill_table() {
         dispatch(setLoading(true))
         try {
-            const response = await axios.get("http://localhost:8080/dot/get-list");
+            const response = await axiosInstance.get("/dot/get-list")
             dispatch(editTable(response.data))
         } catch (e) {
             console.error("Error fetching table data:", e);

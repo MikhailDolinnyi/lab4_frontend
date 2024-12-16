@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import axios from "axios";
 import {incrementScaleCounter, resetScaleCounter, triggerRefresh} from "../../generalSlice";
+import axiosInstance from "../../axiosInstance";
 
 function CoordinatePlate() {
     const table = useSelector((state) => state.tableEditor.table)
@@ -44,10 +45,7 @@ function CoordinatePlate() {
         };
 
         try {
-            await axios.post(
-                "http://localhost:8080/dot/check",
-                values
-            );
+            await axiosInstance.post("/dot/check", values)
 
             dispatch(incrementScaleCounter())
             dispatch(triggerRefresh());

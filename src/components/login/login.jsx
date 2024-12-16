@@ -25,6 +25,7 @@ import {useFormik} from "formik";
 import axios, {AxiosError} from "axios";
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
+import {ref} from "yup";
 
 
 function Login(props) {
@@ -47,10 +48,15 @@ function Login(props) {
                 values
             );
             console.log(response.status)
-            const token = response.data
+            const accessToken = response.data.accessToken
+            const refreshToken = response.data.refreshTokenHash
 
-            console.log(token)
-            localStorage.setItem("token", token)
+
+            localStorage.setItem("accessToken", accessToken)
+            localStorage.setItem("refreshToken", refreshToken)
+
+            console.log(refreshToken)
+            console.log(accessToken)
 
 
 
