@@ -1,35 +1,62 @@
-import React, {useState} from "react";
-import {useFormik} from "formik";
+import React, { useState } from "react";
+import { useFormik } from "formik";
 import * as Yup from "yup";
-import {Button} from "baseui/button";
-import {useDispatch} from "react-redux";
-import {triggerRefresh, updateGraph} from "../../generalSlice"
+import { Button } from "baseui/button";
+import { useDispatch } from "react-redux";
+import { triggerRefresh, updateGraph } from "../../redux/generalSlice";
 import axiosInstance from "../../axiosInstance";
+import styled from "styled-components";
+
+const FormContainer = styled.form`
+    margin-top: 20px; /* Установить фиксированный отступ */
+    width: 200px; /* фиксированная ширина */
+    flex-direction: column;
+    justify-content: center;
+    background-color: white;
+    padding: 20px;
+    border-radius: 20px;
+    
+    button{
+        color: black;
+        border: 2px solid grey;
+        border-radius: 20px;
+    }
+    button:hover{
+        background-color: aquamarine;
+    }
+`;
+
+const InputContainer = styled.div`
+  margin-bottom: 20px;
+`;
+
+const ErrorText = styled.div`
+  color: red;
+  margin-bottom: 10px;
+`;
 
 function CoordinateForm() {
     const [error, setError] = useState("");
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
 
 
     const onSubmit = async (values) => {
-        console.log("Values: ", values)
-        setError("")
+        console.log("Values: ", values);
+        setError("");
 
         try {
-            const response = await axiosInstance.post("/dot/check", values);
+            await axiosInstance.post("/dot/check", values);
             dispatch(triggerRefresh());
         } catch (err) {
             console.error("Error:", err);
         }
-
-    }
-
+    };
 
     const formik = useFormik({
         initialValues: {
-            x: "0", // Начальное значение для ComboBox
-            y: "", // Начальное значение для TextInput
-            r: "3", // Начальное значение для ComboBox
+            x: "0",
+            y: "",
+            r: "3",
         },
         validationSchema: Yup.object({
             y: Yup.number()
@@ -39,40 +66,28 @@ function CoordinateForm() {
             x: Yup.string().required("X is required"),
             r: Yup.number().required("Radius is required").min(1, "R must be greater than or equal to 1"),
         }),
-        onSubmit
+        onSubmit,
     });
-
 
     const handleRadiusChange = (e) => {
         formik.handleChange(e);
-        dispatch(updateGraph(e.target.value))
-    }
+        dispatch(updateGraph(e.target.value));
+    };
 
     return (
-        <form id="forms" onSubmit={formik.handleSubmit}>
+        <FormContainer onSubmit={formik.handleSubmit}>
+            {formik.touched.y && formik.errors.y && <ErrorText>{formik.errors.y}</ErrorText>}
+            {formik.touched.x && formik.errors.x && <ErrorText>{formik.errors.x}</ErrorText>}
+            {formik.touched.r && formik.errors.r && <ErrorText>{formik.errors.r}</ErrorText>}
 
-            {formik.touched.y && formik.errors.y && (
-                <div style={{color: "red"}}>{formik.errors.y}</div>
-            )}
-
-            {formik.touched.x && formik.errors.x && (
-                <div style={{color: "red"}}>{formik.errors.x}</div>
-            )}
-
-            {formik.touched.r && formik.errors.r && (
-                <div style={{color: "red"}}>{formik.errors.r}</div>
-            )}
-
-
-            {/* ComboBox for X */}
-
-            <div className="type-form">
+            <InputContainer>
                 <label htmlFor="x-coordinate">X Coordinate:</label>
-                <select id="x-coordinate" className="type-form"
-                        name="x"
-                        value={formik.values.x}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
+                <select
+                    id="x-coordinate"
+                    name="x"
+                    value={formik.values.x}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                 >
                     {["-5", "-4", "-3", "-2", "-1", "0", "1", "2", "3"].map((option) => (
                         <option key={option} value={option}>
@@ -80,11 +95,9 @@ function CoordinateForm() {
                         </option>
                     ))}
                 </select>
-            </div>
+            </InputContainer>
 
-
-            {/* TextInput for Y */}
-            <div className="type-form">
+            <InputContainer>
                 <label htmlFor="y-coordinate">Y Coordinate (-3 to 3):</label>
                 <input
                     id="y-coordinate"
@@ -95,31 +108,29 @@ function CoordinateForm() {
                     onBlur={formik.handleBlur}
                     placeholder="-3 to 3"
                 />
-            </div>
+            </InputContainer>
 
-
-            <div className="type-form">
-                {/* ComboBox for Radius */}
+            <InputContainer>
                 <label htmlFor="radius">Radius:</label>
-                <select id="radius"
-                        className="type-form"
-                        name="r"
-                        value={formik.values.r}
-                        onChange={handleRadiusChange}
-                        onBlur={formik.handleBlur}
+                <select
+                    id="radius"
+                    name="r"
+                    value={formik.values.r}
+                    onChange={handleRadiusChange}
+                    onBlur={formik.handleBlur}
                 >
                     {["-5", "-4", "-3", "-2", "-1", "0", "1", "2", "3"].map((option) => (
-                        <option key={option} value={option}>
+                        <option key={option} value={option} disabled={+option <1}>
                             {option}
                         </option>
                     ))}
                 </select>
-            </div>
+            </InputContainer>
 
-            {/* Submit Button */}
             <Button type="submit" isLoading={formik.isSubmitting}>
-                Submit</Button>
-        </form>
+                Submit
+            </Button>
+        </FormContainer>
     );
 }
 

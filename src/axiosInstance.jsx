@@ -1,9 +1,16 @@
 import axios from "axios";
+import {editName} from "./redux/usernameSlice";
+
 
 // Централизованная функция logout
-export function logout() {
+export function logout(dispatch) {
+
+    localStorage.removeItem("username");
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
+    if (dispatch) {
+        dispatch(editName("")); // Очистка имени пользователя в Redux
+    }
     window.location.href = "/login"; // Перенаправление на страницу логина
 }
 

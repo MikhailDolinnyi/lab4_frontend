@@ -4,10 +4,10 @@ import "./App.css";
 import styled from "styled-components";
 import {Route, Routes} from "react-router-dom";
 import {Login} from "./components/login/login";
-import {Home} from "./components/home";
-import {Register} from "./components/register";
+import {Home} from "./components/home/main";
+import {Register} from "./components/register/register";
 import {Provider} from "react-redux";
-import store from './store'
+import store from './redux/store'
 
 
 const AppContainer = styled.div`

@@ -32,7 +32,8 @@ const root = ReactDOM.createRoot(
   document.getElementById("root")
 );
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>
+    // в режиме разработки вызывает двойной рендеринг компонентов, чтобы выявить побочные эффекты
     <StyletronProvider value={engine}>
       <BaseProvider
         theme={DarkTheme}
@@ -54,10 +55,8 @@ root.render(
         </AuthProvider>
       </BaseProvider>
     </StyletronProvider>
-  </React.StrictMode>
+  // </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+
 reportWebVitals();
