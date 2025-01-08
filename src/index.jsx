@@ -41,18 +41,12 @@ root.render(
           AppContainer: { style: { width: "100%", height: "100%" } },
         }}
       >
-        <AuthProvider
-          authType={"cookie"}
-          authName={"_auth"}
-          cookieDomain={window.location.hostname}
-          cookieSecure={false}
-        >
+
           <Centered>
             <BrowserRouter>
               <App />
             </BrowserRouter>
           </Centered>
-        </AuthProvider>
       </BaseProvider>
     </StyletronProvider>
   // </React.StrictMode>

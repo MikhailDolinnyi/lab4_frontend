@@ -8,14 +8,24 @@ import {useDispatch, useSelector} from "react-redux";
 import {editName} from "../../redux/usernameSlice";
 import {logout as performLogout} from "../../axiosInstance";
 
-const BackgroundContainer = styled.div`
-    background-color: ${(props) => props.bgColor || "#282c34"};
-    min-height: 100vh; /* Занимает весь экран по высоте */
+// Контейнер для всей страницы
+export const Container = styled.div`
+    width: 100%;
+    min-height: 100vh; /* Растягивает контейнер на всю высоту экрана */
     display: flex;
-    flex-direction: column;
     align-items: center;
-    padding: 20px;
+    justify-content: center;
+    flex-direction: column;
+    background-color: #1c1c1c;
+    user-select: none;
+    box-sizing: border-box;
+
+    @media (max-width: 745px) {
+        padding: 1rem; /* Отступы для мобильных устройств */
+    }
 `;
+
+
 
 const HeaderContainer = styled.div`
     position: fixed;
@@ -25,17 +35,30 @@ const HeaderContainer = styled.div`
     display: flex;
     justify-content: space-between; /* Разместить элементы по краям */
     align-items: center;
-    background-color: #1c1c1c; /* Цвет фона */
+    background-color: #1c1c1c;
     padding: 10px 20px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Тень для визуального отделения */
-
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    
+    
+    @media (max-width: 745px) {
+        flex-direction: column; /* Размещаем элементы в колонку */
+        align-items: flex-start; /* Выровнять по левому краю */
+        padding: 10px;
+    }
 `;
+
 
 const Greeting = styled.h1`
     color: white;
-    margin: 0; /* Убрать отступы по умолчанию */
+    margin: 0;
     font-size: 18px;
+
+    @media (max-width: 745px) {
+        font-size: 16px; /* Уменьшаем шрифт для мобильных */
+        margin-bottom: 10px; /* Добавляем отступ снизу */
+    }
 `;
+
 
 const LogoutButton = styled(Button)`
     border-radius: 20px;
@@ -44,16 +67,39 @@ const LogoutButton = styled(Button)`
     :hover {
         background-color: red;
     }
+
+    @media (max-width: 745px) {
+        margin-right: 0; /* Убираем отступ справа */
+        width: 100%; /* Растягиваем кнопку на всю ширину */
+        margin-top: 10px; /* Отступ сверху */
+    }
 `;
+
 
 
 const MainContainer = styled.div`
     display: flex;
+    flex-grow: 1;
     align-items: flex-start;
     gap: 20px;
-    margin-top: 5%;
+    width: 100%;
+    margin-top: 70px; /* Отступ равен высоте HeaderContainer */
+    box-sizing: border-box;
+    
+    
 
+    @media (max-width: 1267px) {
+        flex-direction: column; /* Переводим элементы в колонку для планшетов */
+        align-items: center; /* Центрируем элементы */
+        gap: 10px; /* Уменьшаем расстояние между элементами */
+    }
+
+    @media (max-width: 745px) {
+        margin-top: 90px; /* Увеличиваем отступ для мобильных */
+    }
 `;
+
+
 
 function Home() {
     const name = useSelector((state) => state.usernameEditor.username);
@@ -73,7 +119,7 @@ function Home() {
 
 
     return (
-        <BackgroundContainer bgColor="#1c1c1c">
+        <Container>
             <HeaderContainer>
                 <Greeting>Hello, {name}</Greeting>
                 <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
@@ -84,7 +130,7 @@ function Home() {
                 <CoordinateForm/>
                 <Table/>
             </MainContainer>
-        </BackgroundContainer>
+        </Container>
     );
 }
 

@@ -1,56 +1,23 @@
 import {Button} from "baseui/button";
-
-
-import {Input} from "baseui/input";
-import styled from "styled-components";
-import {
-    HeadingXXLarge,
-    HeadingXLarge,
-    HeadingLarge,
-    HeadingMedium,
-    HeadingSmall,
-    HeadingXSmall,
-} from "baseui/typography";
-import {
-    Container,
-    ErrorText,
-    InnerContainer,
-    InputWrapper,
-    StyledInput,
-    Head
-} from "../commons";
-
-import {useSignIn} from "react-auth-kit";
+import {HeadingXXLarge,} from "baseui/typography";
+import {Container, ErrorText, Head, InnerContainer, InputWrapper, StyledInput} from "../commons";
+import {validationSchema} from "../validationSchema";
 import {useFormik} from "formik";
 import axios, {AxiosError} from "axios";
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {ref} from "yup";
-import * as Yup from "yup";
-import {useDispatch, useSelector} from "react-redux";
-import {editName} from "../../redux/usernameSlice";
 
 
-function Login(props) {
+function Login() {
     const [error, setError] = useState("");
 
     const navigate = useNavigate();
 
-    const name = useSelector((state) => state.usernameEditor.username);
-    const dispatch = useDispatch();
 
     const handleRedirect = () => {
         navigate("/register")
     }
 
-    // Определение схемы валидации
-    const validationSchema = Yup.object({
-        username: Yup.string()
-            .required("Username is required"), // Поле обязательно
-        password: Yup.string()
-            .min(8, "Password must be at least 8 characters long") // Минимум 8 символов
-            .required("Password is required"), // Поле обязательно
-    });
 
     const onSubmit = async (values) => {
         console.log("Values: ", values);
@@ -65,11 +32,9 @@ function Login(props) {
             console.log(response.status)
 
 
-
             const username = response.data.username
             const accessToken = response.data.accessToken
             const refreshToken = response.data.refreshTokenHash
-
 
 
             localStorage.setItem("username", username)
@@ -78,7 +43,6 @@ function Login(props) {
 
             console.log(refreshToken)
             console.log(accessToken)
-
 
 
             navigate("/home")

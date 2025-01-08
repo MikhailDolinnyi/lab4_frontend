@@ -10,7 +10,7 @@ const TableContainer = styled.table`
   display: block;
   border: 2px solid grey;
   border-collapse: collapse;
-  width: 700px;
+  width: 100%;
   background: white;
   border-radius: 20px;
     
@@ -18,20 +18,23 @@ const TableContainer = styled.table`
 `;
 
 const TableHeader = styled.th`
-  width: 100px;
+    width: calc(100% / 6);
   text-align: center;
   background-color: #f4f4f4;
 `;
 
 const TableRow = styled.tr`
+    width: calc(100% / 6); /* Делим ширину таблицы на количество столбцов */
   &:nth-child(even) {
     background-color: #f9f9f9;
   }
 `;
 
 const TableCell = styled.td`
-  width: 100px;
-  text-align: center;
+    
+    width: 100%;
+    word-wrap: break-word;
+    text-align: center;
   padding: 10px;
 `;
 
@@ -58,13 +61,19 @@ function Table() {
         fill_table();
     }, [refreshTable]);
 
+    // Функция преобразования временной метки в локальное время
+    const formatTimestampToLocalTime = (timestamp) => {
+        const date = new Date(timestamp);
+        return date.toLocaleString(); // Преобразует дату в строку с учетом локального часового пояса
+    };
+
     const listDot = table.map((dot, index) => (
         <TableRow key={index}>
             <TableCell>{dot.x}</TableCell>
             <TableCell>{dot.y}</TableCell>
             <TableCell>{dot.r}</TableCell>
             <TableCell>{dot.executionTime}</TableCell>
-            <TableCell>{dot.time}</TableCell>
+            <TableCell>{formatTimestampToLocalTime(dot.time)}</TableCell>
             <TableCell>{dot.result ? "True" : "False"}</TableCell>
         </TableRow>
     ));
@@ -87,3 +96,4 @@ function Table() {
 }
 
 export default Table;
+

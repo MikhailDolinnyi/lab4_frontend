@@ -5,20 +5,22 @@ import {HeadingXXLarge} from "baseui/typography";
 // Контейнер для всей страницы
 export const Container = styled.div`
     width: 100%;
-    height: 100%;
+    min-height: 100vh; /* Минимальная высота на весь экран */
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     background-color: #1c1c1c;
+    box-sizing: border-box;
+    user-select: none;
+  
 
-
-    
-
-    
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Тень для визуального отделения */
-
+    @media (max-width: 745px) {
+        padding: 1rem; /* Уменьшение отступов на мобильных */
+    }
 `;
+
+
 
 export const CenteredHeadingXXLarge = styled(HeadingXXLarge)`
   text-align: center;
@@ -29,17 +31,28 @@ export const CenteredHeadingXXLarge = styled(HeadingXXLarge)`
 
 // Внутренний контейнер для формы
 export const InnerContainer = styled.div`
+    margin: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 3rem 2rem; /* Уменьшил отступы */
+    padding: 3rem 2rem;
     border-radius: 1rem;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
     background-color: #1c1c1c;
     width: 100%;
-    max-width: 400px; /* Ограничил ширину формы */
+    max-width: 400px;
+
+    @media (max-width: 1267px) {
+        max-width: 300px; /* Уменьшение ширины для планшетов */
+    }
+
+    @media (max-width: 745px) {
+        max-width: 90%; /* Почти на всю ширину экрана на мобильных */
+        padding: 2rem 1.5rem;
+    }
 `;
+
 
 // Контейнер для полей ввода
 export const InputWrapper = styled.div`
@@ -49,24 +62,46 @@ export const InputWrapper = styled.div`
     width: 100%;
     margin: 1rem 0;
 
-    // Добавлено для выравнивания кнопок рядом
     button {
         border-radius: 20px;
-        margin: 0 0.5rem; /* Отступ между кнопками */
+        margin: 0 0.5rem;
     }
-    
-    button:hover{
+
+    button:hover {
         background-color: aquamarine;
     }
+
+    @media (max-width: 1267px) {
+        margin: 0.8rem 0; /* Уменьшение отступов для планшетов */
+    }
+
+    @media (max-width: 745px) {
+        margin: 0.5rem 0; /* Еще меньше отступов для мобильных */
+        flex-direction: column; /* Кнопки и поля ввода в колонку */
+        button {
+            margin: 0.5rem 0; /* Вертикальный отступ между кнопками */
+        }
+    }
 `;
+
 
 
 // Стили для поля ввода
 export const StyledInput = styled(Input)`
     width: 100%;
     font-size: 16px;
-    padding: 0.8rem; /* Немного больше отступов */
+    padding: 0.8rem;
+
+    @media (max-width: 1267px) {
+        font-size: 14px; /* Уменьшение шрифта для планшетов */
+    }
+
+    @media (max-width: 745px) {
+        font-size: 12px; /* Уменьшение шрифта для мобильных */
+        padding: 0.6rem; /* Меньше отступов */
+    }
 `;
+
 
 // Стили для текста ошибок
 export const ErrorText = styled.span`
@@ -80,6 +115,7 @@ export const ErrorText = styled.span`
 
 // Заголовок страницы
 export const Head = styled.div`
+    width: 100%;
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     color: #ffffff;
     text-align: center;
@@ -87,26 +123,16 @@ export const Head = styled.div`
     font-size: 40px;
     font-weight: bold;
     padding: 1rem 0;
+    user-select: none;
+
+    @media (max-width: 1267px) {
+        font-size: 32px; /* Уменьшение размера шрифта на планшетах */
+    }
+
+    @media (max-width: 745px) {
+        font-size: 24px; /* Уменьшение размера шрифта на мобильных */
+    }
 `;
 
-// Стили для кнопок
-export const StyledButton = styled.button`
-  background-color: #4caf50;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  padding: 0.8rem 1.5rem;
-  font-size: 16px;
-  cursor: pointer;
-  margin: 0 0.5rem;
-  transition: background-color 0.3s;
 
-  &:hover {
-    background-color: #45a049;
-  }
 
-  &:disabled {
-    background-color: #888;
-    cursor: not-allowed;
-  }
-`;

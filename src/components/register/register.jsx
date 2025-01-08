@@ -9,9 +9,10 @@ import {
     InputWrapper,
     StyledInput
 } from "../commons";
+import {validationSchema} from "../validationSchema";
 
 import {useFormik} from "formik";
-import * as Yup from "yup"; // Импорт Yup
+
 import axios, {AxiosError} from "axios";
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
@@ -24,14 +25,6 @@ function Register() {
         navigate("/login");
     };
 
-    // Определение схемы валидации
-    const validationSchema = Yup.object({
-        username: Yup.string()
-            .required("Username is required"), // Поле обязательно
-        password: Yup.string()
-            .min(8, "Password must be at least 8 characters long") // Минимум 8 символов
-            .required("Password is required"), // Поле обязательно
-    });
 
     const onSubmit = async (values) => {
         console.log("Values: ", values);
@@ -43,7 +36,7 @@ function Register() {
         } catch (err) {
             if (err && err instanceof AxiosError) {
                 // Извлекаем сообщение об ошибке из ответа сервера
-                const serverMessage = err.response?.data || "An unexpected error occurred.";
+                const serverMessage = err.response?.data.error || "An unexpected error occurred.";
                 setError(serverMessage); // Сохраняем сообщение об ошибке
             } else if (err && err instanceof Error) {
                 setError(err.message);
