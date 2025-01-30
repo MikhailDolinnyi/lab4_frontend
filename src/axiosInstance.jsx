@@ -1,6 +1,9 @@
 import axios from "axios";
 import {editName} from "./redux/usernameSlice";
+import CONFIG from "./config";
 
+
+const isAuthRoute = (url) => url.startsWith("/auth/")
 
 // Централизованная функция logout
 export function logout(dispatch) {
@@ -16,8 +19,9 @@ export function logout(dispatch) {
 
 // Создаём экземпляр Axios
 const axiosInstance = axios.create({
-    baseURL: "http://localhost:8080",
+    baseURL: CONFIG.API_BASE_URL,  // Используем API_BASE_URL из конфигурации
 });
+
 
 // Функция для обновления accessToken
 async function refreshAccessToken() {
@@ -51,8 +55,10 @@ async function refreshAccessToken() {
 // Интерсептор запросов: добавление accessToken
 axiosInstance.interceptors.request.use(
     (config) => {
+
+
         const accessToken = localStorage.getItem("accessToken");
-        if (accessToken) {
+        if (!isAuthRoute(config.url) && accessToken) {
             config.headers["Authorization"] = `Bearer ${accessToken}`;
         }
         return config;
@@ -65,6 +71,10 @@ axiosInstance.interceptors.response.use(
     (response) => response,
     async (error) => {
         const originalRequest = error.config;
+
+        if(isAuthRoute(originalRequest.url)){
+            return Promise.reject(error)
+        }
 
         if (error.response && error.response.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;

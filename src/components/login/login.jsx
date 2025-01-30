@@ -6,7 +6,8 @@ import {useFormik} from "formik";
 import axios, {AxiosError} from "axios";
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
-
+import CONFIG from "../../config";
+import axiosInstance from  "../../axiosInstance"
 
 function Login() {
     const [error, setError] = useState("");
@@ -25,8 +26,8 @@ function Login() {
 
 
         try {
-            const response = await axios.post(
-                "http://localhost:8080/auth/signin",
+            const response = await axiosInstance.post(
+                "/auth/signin",
                 values
             );
             console.log(response.status)

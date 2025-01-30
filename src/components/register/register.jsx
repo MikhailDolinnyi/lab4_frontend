@@ -1,4 +1,6 @@
 import {Button} from "baseui/button";
+import CONFIG from "../../config";
+import axiosInstance from  "../../axiosInstance"
 
 import {
     CenteredHeadingXXLarge,
@@ -31,7 +33,7 @@ function Register() {
         setError(""); // Сбрасываем предыдущую ошибку
 
         try {
-            await axios.post("http://localhost:8080/auth/signup", values);
+            await axiosInstance.post("/auth/signup", values);
             navigate("/login"); // Перенаправление при успешной регистрации
         } catch (err) {
             if (err && err instanceof AxiosError) {
